@@ -17,7 +17,7 @@ ThreadPool::~ThreadPool() {
 	
 }
 
-static DWORD WINAPI ThreadStartRoutine(LPVOID lpParam) {
+DWORD WINAPI ThreadPool::ThreadStartRoutine(LPVOID lpParam) {
 	ThreadPool* pObj = (ThreadPool*)lpParam;
 	return pObj->AwaitLoop;
 }
@@ -49,10 +49,26 @@ void ThreadPool::AwaitLoop() {
 	ExitThread(0);
 }
 
-void ThreadPool::EnqueueTask(void (*task)(LPVOID lpParam), LPVOID lpParam) { 
+void ThreadPool::EnqueueTask(void (*task)(LPVOID lpParam), LPVOID taskParam) { 
 	WaitForSingleObject(mtx, INFINITE);
 	{
-
+		if (isRunning) {
+			this->taskQueue.push_back(task);
+			this->taskParams.push_back(taskParam);
+		}
 	}
 	ReleaseMutex(mtx);
+}
+
+void ThreadPool::WaitAll() {
+	bool stopCondition = false;
+	while (!stopCondition) {
+		WaitForSingleObject(mtx, INFINITE);
+		{
+			stopCondition = taskQueue.size == 0 && refCount == 0;
+			if (stopCondition)
+				isRunning = false;
+		}
+		ReleaseMutex(mtx);
+	}
 }
