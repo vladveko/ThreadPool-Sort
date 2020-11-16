@@ -14,10 +14,10 @@ private:
 	unsigned int refCount;
 	std::list<void (*)(LPVOID lpParam)> taskQueue;
 	std::list<LPVOID> taskParams;
-	HANDLE threads[DEF_THREAD_NUM];
+	HANDLE threads[DEF_THREAD_NUM] = {};
 	HANDLE mtx;
 
-	void AwaitLoop();
+	DWORD WINAPI AwaitLoop();
 
 public:
 	ThreadPool();

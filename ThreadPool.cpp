@@ -19,10 +19,10 @@ ThreadPool::~ThreadPool() {
 
 DWORD WINAPI ThreadPool::ThreadStartRoutine(LPVOID lpParam) {
 	ThreadPool* pObj = (ThreadPool*)lpParam;
-	return pObj->AwaitLoop;
+	return pObj->AwaitLoop();
 }
 
-void ThreadPool::AwaitLoop() {
+DWORD WINAPI ThreadPool::AwaitLoop() {
 	void (*task)(LPVOID taskParam) = NULL;
 	LPVOID taskParam = NULL;
 
@@ -65,7 +65,7 @@ void ThreadPool::WaitAll() {
 	while (!stopCondition) {
 		WaitForSingleObject(mtx, INFINITE);
 		{
-			stopCondition = taskQueue.size == 0 && refCount == 0;
+			stopCondition = taskQueue.size() == 0 && refCount == 0;
 			if (stopCondition)
 				isRunning = false;
 		}
