@@ -14,7 +14,13 @@ ThreadPool::ThreadPool() {
 }
 
 ThreadPool::~ThreadPool() {
-	
+	WaitAll();
+	WaitForMultipleObjects(DEF_THREAD_NUM, threads, true, INFINITE);
+	for (int i = 0; i < DEF_THREAD_NUM; i++)
+	{
+		CloseHandle(threads[i]);
+	}
+	CloseHandle(mtx);
 }
 
 DWORD WINAPI ThreadPool::ThreadStartRoutine(LPVOID lpParam) {
