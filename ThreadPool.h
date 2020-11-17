@@ -25,4 +25,5 @@ public:
 
 	void EnqueueTask(void (*task)(LPVOID lpParam), LPVOID lpParam);
 	void WaitAll();
+	void Stop();
 };

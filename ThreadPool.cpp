@@ -72,6 +72,17 @@ void ThreadPool::WaitAll() {
 		WaitForSingleObject(mtx, INFINITE);
 		{
 			stopCondition = taskQueue.size() == 0 && refCount == 0;
+		}
+		ReleaseMutex(mtx);
+	}
+}
+
+void ThreadPool::Stop() {
+	bool stopCondition = false;
+	while (!stopCondition) {
+		WaitForSingleObject(mtx, INFINITE);
+		{
+			stopCondition = taskQueue.size() == 0 && refCount == 0;
 			if (stopCondition)
 				isRunning = false;
 		}
