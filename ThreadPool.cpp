@@ -14,7 +14,7 @@ ThreadPool::ThreadPool() {
 }
 
 ThreadPool::~ThreadPool() {
-	WaitAll();
+	Stop();
 	WaitForMultipleObjects(DEF_THREAD_NUM, threads, true, INFINITE);
 	for (int i = 0; i < DEF_THREAD_NUM; i++)
 	{
@@ -29,13 +29,12 @@ DWORD WINAPI ThreadPool::ThreadStartRoutine(LPVOID lpParam) {
 }
 
 DWORD WINAPI ThreadPool::AwaitLoop() {
-	void (*task)(LPVOID taskParam) = NULL;
-	LPVOID taskParam = NULL;
-
 	while (isRunning) {
+		void (*task)(LPVOID taskParam) = NULL;
+		LPVOID taskParam = NULL;
 		WaitForSingleObject(mtx, INFINITE);
 		{
-			if (taskQueue.size() != 0)
+			if (!taskQueue.empty())
 			{
 				task = this->taskQueue.front();
 				taskParam = this->taskParams.front();

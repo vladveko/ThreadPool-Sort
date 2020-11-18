@@ -1,6 +1,8 @@
 #include <iostream>
+#include "StrSorter.h"
 
 int main()
 {
-	std::cout << "Hello World!\n";
+	std::cout << "Sorting starts\n" << std::endl;
+	StrSorter::Sort("D:\\Semester 5\\OSaSP\\Lab4\\ThreadPool\\FileToSort.txt");
 }

@@ -1,13 +1,13 @@
 #pragma once
 
 #include <iostream>
-#include <Windows.h>
+#include <vector>
 
-static class StrSorter {
+class StrSorter {
 
 public:
-	void Sort(std::string filePath);
+	static void Sort(std::string filePath);
 
 private:
-	void PrintVector(std::vector<std::string> vector);
+	static void PrintVector(std::vector<std::string> vector);
 };
