@@ -57,10 +57,11 @@ void StrSorter::Sort(string filePath) {
 }
 
 void StrSorter::PrintVector(std::vector<std::string> vector) {
-	cout << "\nPrinting vector:" << endl;
+	cout << "Printing vector:" << endl;
 	for (int i = 0; i < vector.size(); i++) {
 		cout << vector[i] << endl;
 	}
+	cout << endl;
 }
 
 void SortGroup(LPVOID params) {
